@@ -120,7 +120,7 @@
     
 # p my_count(ary){ |x| x%2==0 }
 
-#my_map 
+# # my_map 
 # def my_map(array) 
 #     newArray= []
   
@@ -134,28 +134,45 @@
 #  p my_map(test) {|x| x*2 }
 
 # my_inject
-def my_inject(z)
-result= 1
-  for i in  0..z.length-1 do 
-     result=yield(result,(z[i]))
-  end
-  return result
+# def my_inject(z)
+# result= 1
+#   for i in  0..z.length-1 do 
+#      result=yield(result,(z[i]))
+#   end
+#   return result
   
-end
+# end
 
 # test2=[8,9,2,5,6]
 # p my_inject(test2) {|sum,number| sum * number }
 
 
 
-def multiply_els(array)
+# def multiply_els(array)
 
-  return my_inject(array) do |sum, number| 
-   sum* number
-  end
+#   return my_inject(array) do |sum, number| 
+#    sum* number
+#   end
 
-end
+# end
 
- p multiply_els([2,4,5,7])
+#  p multiply_els([2,4,5,7])
 
+#my_map modify
 
+    def my_map(array, mycall_proc)
+        newArray = []
+
+        for i in  0..array.length-1 do 
+
+          newArray << mycall_proc.call(array[i])
+  
+        
+        end
+
+        return newArray
+      end
+
+    mycall_proc = Proc.new { |n| n*2 }
+
+    p my_map([1,2,3,7, 4], mycall_proc)
