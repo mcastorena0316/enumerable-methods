@@ -72,3 +72,52 @@
 # numbers = [1, 2, 3, 4, 5, 7]
 
 #  p my_all?(numbers){ |x| x < 6 }
+
+ #my_any?
+#  def my_any?(y)
+#   contador= 0
+#   for i in  0..y.length-1 do
+#     if yield(y[i]) == true 
+#       contador += 1 
+#     end 
+#     if contador == 0   then
+#       return false 
+#     end  
+#   end
+  
+# end 
+ 
+# numbers2 = [1, 2, 3, 4, 5]
+
+# p my_any?(numbers2){ |x| x > 6 }
+
+ #my_none?
+#   def my_none?(y)
+
+#   for i in  0..y.length-1 do
+#     if yield(y[i]) == true 
+#       return false
+#     end  
+#   end
+#   true
+# end 
+ 
+# numbers3 = [1, 0, 3, 2, 5, 4, 7, 6, 9, 8]
+# p my_none?(numbers3){ |x| x > 10 }
+
+#my count
+def my_count(m)
+    contador= 0
+    for i in  0..m.length-1 do
+      if yield(m[i]) then
+       contador += 1 
+      end
+  end 
+  return contador
+end
+     
+  ary = [1, 2, 4, 2]
+    
+p my_count(ary){ |x| x%2==0 }
+
+#my_map 
