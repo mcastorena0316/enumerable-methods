@@ -18,7 +18,7 @@
 
 # arr=[1,2,3,4]
 
-# p my_each(arr) {|x| x*2 }
+# p my_each(arr) {|x| x }
 
 # #my each
 # def my_each_with_index(array)
@@ -106,18 +106,42 @@
 # p my_none?(numbers3){ |x| x > 10 }
 
 #my count
-def my_count(m)
-    contador= 0
-    for i in  0..m.length-1 do
-      if yield(m[i]) then
-       contador += 1 
-      end
-  end 
-  return contador
-end
+# def my_count(m)
+#     contador= 0
+#     for i in  0..m.length-1 do
+#       if yield(m[i]) then
+#        contador += 1 
+#       end
+#   end 
+#   return contador
+# end
      
-  ary = [1, 2, 4, 2]
+#   ary = [1, 2, 4, 2]
     
-p my_count(ary){ |x| x%2==0 }
+# p my_count(ary){ |x| x%2==0 }
 
 #my_map 
+# def my_map(array) 
+#     newArray= []
+  
+#     for i in  0..array.length-1 do 
+#      newArray << yield(array[i])
+#     end
+#     return newArray
+#   end
+#  test= [2,4,6,8,100] 
+
+#  p my_map(test) {|x| x*2 }
+
+# my_inject
+def my_inject(z)
+result= 0 
+  for i in  0..z.length-1 do 
+     result=yield(result,(z[i]))
+  end
+  return result
+  
+end
+
+test2=[8,9,2,5,6]
+p my_inject(test2) {|sum,number| sum= sum + number }
