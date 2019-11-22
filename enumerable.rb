@@ -135,7 +135,7 @@
 
 # my_inject
 def my_inject(z)
-result= 0 
+result= 1
   for i in  0..z.length-1 do 
      result=yield(result,(z[i]))
   end
@@ -143,5 +143,19 @@ result= 0
   
 end
 
-test2=[8,9,2,5,6]
-p my_inject(test2) {|sum,number| sum= sum + number }
+# test2=[8,9,2,5,6]
+# p my_inject(test2) {|sum,number| sum * number }
+
+
+
+def multiply_els(array)
+
+  return my_inject(array) do |sum, number| 
+   sum* number
+  end
+
+end
+
+ p multiply_els([2,4,5,7])
+
+
