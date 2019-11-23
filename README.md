@@ -12,11 +12,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-We built 2 methods with Ruby. The first one takes an array and returns a sorted array using the bubble sort methodology. The second one sorts an array by accepting a block, using yield inside our method definition to accomplish this.
+I build some methods in an Enumerable module. This were my own version of some popular Ruby methods like: none, any, all, etc.
 
 ### Built With
 
-* [RUBY](https://github.com/mcastorena0316/bubble-sort-ruby/blob/developer-branch/test.rb)
+* [RUBY](https://github.com/mcastorena0316/enumerable-methods/blob/feature-branch/enumerable.rb)
 
 ## Contributing
 
@@ -34,9 +34,9 @@ Contributions are what make the open source community such an amazing place to b
 
 Melissa Castorena - mcastorena0316@gmail.com
 
-Guadalupe Rangel- kanemekanik@gmail.com
 
-Project Link: [Bubble Sort Ruby](https://github.com/mcastorena0316/bubble-sort-ruby/tree/developer-branch)
+
+Project Link: [ENUMERABLE METHODS](https://github.com/mcastorena0316/enumerable-methods/tree/feature-branch)
 
 
 
