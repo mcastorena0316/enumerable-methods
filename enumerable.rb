@@ -1,9 +1,11 @@
 # module for some enumerable methods
 module Enumerable
   def my_each
+    return to_enum unless block_given?
+
     new_array = []
     i = 0
-    while i < self.size
+    while i < size
       new_array << yield(self[i])
       i += 1
     end
@@ -11,9 +13,11 @@ module Enumerable
   end
 
   def my_each_with_index
+    return to_enum unless block_given?
+
     new_array2 = []
     i = 0
-    while i < self.size
+    while i < size
       new_array2 << yield(self[i], i)
       i += 1
     end
@@ -21,9 +25,11 @@ module Enumerable
   end
 
   def my_select
+    return to_enum unless block_given?
+
     new_array3 = []
     i = 0
-    while i < self.size
+    while i < size
       new_array3 << self[i] if yield(self[i]) == true
       i += 1
     end
@@ -32,7 +38,7 @@ module Enumerable
 
   def my_all?
     i = 0
-    while i < self.size
+    while i < size
       return false if yield(self[i]) == false || yield(self[i]).nil?
 
       i += 1
@@ -43,7 +49,7 @@ module Enumerable
   def my_any?
     contador = 0
     i = 0
-    while i < self.size
+    while i < size
       contador += 1 if yield(self[i]) == true
       i += 1
     end
@@ -52,72 +58,48 @@ module Enumerable
     true
   end
 
-  def self.my_none?(yet)
+  def my_none?
     i = 0
-    while i < yet.length
-      return false if yield(yet[i]) == true
+    while i < size
+      return false if yield(self[i]) == true
 
       i += 1
     end
     true
   end
 
-  def self.my_count(men)
+  def my_count
     contador = 0
     i = 0
-    while i < men.length
-      contador += 1 if yield(men[i])
+    while i < size
+      contador += 1 if yield(self[i])
 
       i += 1
     end
     contador
   end
 
-  # def self.my_map(array)
-  #   new_array = []
-  #   i = 0
-  #   while i < array.length
-  #     new_array << yield(array[i])
-  #     i += 1
-  #   end
-  #   new_array
-  # end
+  def my_inject(start = 0)
+    return to_enum unless block_given?
 
-  def self.my_inject(zin)
-    result = 1
+    result = start
     i = 0
-    while i < zin.length
-      result = yield(result, (zin[i]))
+    while i < size
+      result = yield(result, (self[i]))
       i += 1
     end
     result
   end
 
-  def self.multiply_els(array)
-    my_inject(array) do |sum, number|
-      sum * number
-    end
-  end
-
-  # def self.my_map(array, mycall_proc)
-  #   new_array = []
-  #   i = 0
-  #   while i < array.length
-  #     new_array << mycall_proc.call(array[i])
-  #     i += 1
-  #   end
-  #   new_array
-  # end
-
-  def self.my_map(array, mycall_proc = nil)
+  def my_map(*)
     new_array4 = []
     i = 0
-    while i < array.length
+    while i < size
 
       new_array4 << if block_given?
-                      yield(array[i])
+                      yield(self[i])
                     else
-                      mycall_proc.call(array[i])
+                      mycall_proc.call(self[i])
                     end
       i += 1
     end
@@ -125,30 +107,25 @@ module Enumerable
   end
 end
 
-# p Enumerable.my_any?([1, 2, 2, 4, 9]) { |x| x > 6 }
-# p Enumerable.my_none?([1, 0, 3, 2, 5, 4, 5, 6, 9, 30]) { |x| x > 10 }
-# p Enumerable.my_count([1, 2, 4, 2]) { |x| (x % 2).zero? }
-# # p Enumerable.my_map([2, 4, 6, 8, 100]) { |x| x * 2 }
-# p Enumerable.my_inject([8, 9, 2, 5, 6]) { |sum, number| sum * number }
-# p Enumerable.multiply_els([2, 4, 5, 7])
-# # mycall_proc = proc { |n| n * 2 }
-# # p Enumerable.my_map([1, 2, 3, 7, 4], mycall_proc)
-# mycall_proc = proc { |n| n * 2 }
-# p Enumerable.my_map([1, 2, 3, 4], mycall_proc)
-# p Enumerable.my_map([1, 2, 3, 8]) { |x| x * 2 }
+def multiply_els(array)
+  array.my_inject(1) { |x, y| x * y }
+end
 
-# puts [1, 2, 3, 5].my_each { |x| p x }
-# [1, 2, 3, 5].each { |x| p x } 
-# [1, 2, 3, 5].my_each { |x| p x } 
+p [1, 2, 3, 5].each { |x| x } == [1, 2, 3, 5].my_each { |x| x }
 
-# p [1, 2, 3, 5].each { |x|  x }  == [1, 2, 3, 5].my_each { |x|  x } 
+[1, 2, 3].my_each_with_index { |x, y| p x, y }
+[1, 2, 3].each_with_index { |x, y| p x, y }
 
-p [1, 2, 3].my_each_with_index { |x, y|  x } ==  [1, 2, 3].each_with_index { |x, y|  x}
+p [1, 2, 3, 4].my_select { |x| (x % 2).zero? } == [1, 2, 3, 4].select { |x| (x % 2).zero?  }
 
-# p [1, 2, 3, 4].my_select { |x| x % 2 == 0} == [1, 2, 3, 4].select { |x| x % 2 == 0 }
+p ['alpha', 'apple', 'allen key'].my_all? { |x| x[0] == 'a' } == ['alpha', 'apple', 'allen key'].all? { |x| x[0] == 'a' }
 
-# p ['alpha', 'apple', 'allen key'].my_all?{ |x| x[0] == 'a' }== ['alpha', 'apple', 'allen key'].all?{ |x| x[0] == 'a' }
+p [1, 2, 2, 4, 7].any? { |x| x > 6 } == [1, 2, 2, 4, 7].my_any? { |x| x > 6 }
 
-# p [1, 2, 2, 4, 7].any?{ |x| x > 6 } == [1, 2, 2, 4, 7].my_any?{ |x| x > 6 }
+p [1, 2, 2, 4, 6].none? { |x| x > 6 } ==  [1, 2, 2, 4, 6].my_none? { |x| x > 6 }
+p [1, 2, 3, 4, 4, 7, 7, 7, 9].count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 }
 
+p [1, 2, 3, 4, 4, 7, 7, 7, 9].inject { |running_total, item| running_total + item } == [1, 2, 3, 4, 4, 7, 7, 7, 9].my_inject { |running_total, item| running_total + item }
 
+p multiply_els([1, 2, 3])
+p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
