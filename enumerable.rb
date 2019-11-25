@@ -1,50 +1,50 @@
 # module for some enumerable methods
 module Enumerable
-  def self.my_each(array)
+  def my_each
     new_array = []
     i = 0
-    while i < array.length
-      new_array << yield(array[i])
+    while i < self.size
+      new_array << yield(self[i])
       i += 1
     end
     new_array
   end
 
-  def self.my_each_with_index(array)
+  def my_each_with_index
     new_array2 = []
     i = 0
-    while i < array.length
-      new_array2 << yield(array[i], i)
+    while i < self.size
+      new_array2 << yield(self[i], i)
       i += 1
     end
     new_array2
   end
 
-  def self.my_select(array)
+  def my_select
     new_array3 = []
     i = 0
-    while i < array.length
-      new_array3 << array[i] if yield(array[i]) == true
+    while i < self.size
+      new_array3 << self[i] if yield(self[i]) == true
       i += 1
     end
     new_array3
   end
 
-  def self.my_all?(yen)
+  def my_all?
     i = 0
-    while i < yen.length
-      return false if yield(yen[i]) == false || yield(yen[i]).nil?
+    while i < self.size
+      return false if yield(self[i]) == false || yield(self[i]).nil?
 
       i += 1
     end
     true
   end
 
-  def self.my_any?(yen)
+  def my_any?
     contador = 0
     i = 0
-    while i < yen.length
-      contador += 1 if yield(yen[i]) == true
+    while i < self.size
+      contador += 1 if yield(self[i]) == true
       i += 1
     end
     return false if contador.zero?
@@ -125,20 +125,30 @@ module Enumerable
   end
 end
 
-p Enumerable.my_each([1, 2, 3, 4]) { |x| x }
-p Enumerable.my_each_with_index(%w[Cool chick beans]) { |item, index|
-  "my word is #{item} and im in position #{index}"
-}
-p Enumerable.my_select([1, 2, 3, 4, 5, 6, 8, 100]) { |item| (item % 2).zero? }
-p Enumerable.my_all?([1, 2, 3, 4, 5, 8]) { |x| x < 6 }
-p Enumerable.my_any?([1, 2, 2, 4, 9]) { |x| x > 6 }
-p Enumerable.my_none?([1, 0, 3, 2, 5, 4, 5, 6, 9, 30]) { |x| x > 10 }
-p Enumerable.my_count([1, 2, 4, 2]) { |x| (x % 2).zero? }
-# p Enumerable.my_map([2, 4, 6, 8, 100]) { |x| x * 2 }
-p Enumerable.my_inject([8, 9, 2, 5, 6]) { |sum, number| sum * number }
-p Enumerable.multiply_els([2, 4, 5, 7])
+# p Enumerable.my_any?([1, 2, 2, 4, 9]) { |x| x > 6 }
+# p Enumerable.my_none?([1, 0, 3, 2, 5, 4, 5, 6, 9, 30]) { |x| x > 10 }
+# p Enumerable.my_count([1, 2, 4, 2]) { |x| (x % 2).zero? }
+# # p Enumerable.my_map([2, 4, 6, 8, 100]) { |x| x * 2 }
+# p Enumerable.my_inject([8, 9, 2, 5, 6]) { |sum, number| sum * number }
+# p Enumerable.multiply_els([2, 4, 5, 7])
+# # mycall_proc = proc { |n| n * 2 }
+# # p Enumerable.my_map([1, 2, 3, 7, 4], mycall_proc)
 # mycall_proc = proc { |n| n * 2 }
-# p Enumerable.my_map([1, 2, 3, 7, 4], mycall_proc)
-mycall_proc = proc { |n| n * 2 }
-p Enumerable.my_map([1, 2, 3, 4], mycall_proc)
-p Enumerable.my_map([1, 2, 3, 8]) { |x| x * 2 }
+# p Enumerable.my_map([1, 2, 3, 4], mycall_proc)
+# p Enumerable.my_map([1, 2, 3, 8]) { |x| x * 2 }
+
+# puts [1, 2, 3, 5].my_each { |x| p x }
+# [1, 2, 3, 5].each { |x| p x } 
+# [1, 2, 3, 5].my_each { |x| p x } 
+
+# p [1, 2, 3, 5].each { |x|  x }  == [1, 2, 3, 5].my_each { |x|  x } 
+
+p [1, 2, 3].my_each_with_index { |x, y|  x } ==  [1, 2, 3].each_with_index { |x, y|  x}
+
+# p [1, 2, 3, 4].my_select { |x| x % 2 == 0} == [1, 2, 3, 4].select { |x| x % 2 == 0 }
+
+# p ['alpha', 'apple', 'allen key'].my_all?{ |x| x[0] == 'a' }== ['alpha', 'apple', 'allen key'].all?{ |x| x[0] == 'a' }
+
+# p [1, 2, 2, 4, 7].any?{ |x| x > 6 } == [1, 2, 2, 4, 7].my_any?{ |x| x > 6 }
+
+
