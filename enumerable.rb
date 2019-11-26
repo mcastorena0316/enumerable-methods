@@ -87,11 +87,11 @@ module Enumerable
     x = args[0].nil? || args[0].class == Symbol ? 0 : args[0]
     sym = args[0].class == Symbol ? args[0] : args[1].class == Symbol ? args[1] : nil
     my_each do |elem|
-      if sym
-        x = x.send(sym, elem)
-      else
-        x = yield(x, elem)
-      end
+      x = if sym
+            x.send(sym, elem)
+          else
+            yield(x, elem)
+          end
     end
     x
   end
