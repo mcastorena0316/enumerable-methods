@@ -36,45 +36,52 @@ module Enumerable
     new_array3
   end
 
-  def my_all?
-    i = 0
-    while i < size
-      return false if yield(self[i]) == false || yield(self[i]).nil?
-
-      i += 1
+  def my_all?(pat=nil)
+    result=true
+    if block_given?
+      my_each{|x| result = false unless yield(x)}
+    elsif pat
+      my_each{|x| result= false unless pattern?(x, pat) }
+    else 
+      my_each { |x| result = false unless x }
     end
-    true
+    result
   end
 
-  def my_any?
+
+  def my_any?(pat=nil)
+    result=false
+    if block_given?
+      my_each{|x| result = true if yield(x) }
+    elsif pat
+      my_each{|x| result= true  if pattern?(x, pat) }
+    else 
+    my_each { |x| result=true  if x }
+    end
+    result
+    
+  end
+
+
+  def my_none?(pat=nil)
+    if block_given? 
+      !my_any? { |x| yield x}
+    elsif pat
+      !my_any?(pat)
+    else
+      my_each{|x| return false if x}
+      true
+    end
+  end
+
+  def my_count(src=nil)
     contador = 0
-    i = 0
-    while i < size
-      contador += 1 if yield(self[i]) == true
-      i += 1
-    end
-    return false if contador.zero?
-
-    true
-  end
-
-  def my_none?
-    i = 0
-    while i < size
-      return false if yield(self[i]) == true
-
-      i += 1
-    end
-    true
-  end
-
-  def my_count
-    contador = 0
-    i = 0
-    while i < size
-      contador += 1 if yield(self[i])
-
-      i += 1
+    if block_given?
+    my_each{|x| contador +=1 if yield x}
+    elsif src
+      my_each{|x| contador+=1 if x== src}
+    else
+      my_each{ contador+= 1}
     end
     contador
   end
@@ -92,6 +99,7 @@ module Enumerable
   end
 
   def my_map(*)
+    return to_enum unless block_given?
     new_array4 = []
     i = 0
     while i < size
@@ -104,6 +112,12 @@ module Enumerable
       i += 1
     end
     new_array4
+  end
+
+  def pattern?(obj, pat)
+    (obj.respond_to?(:eql?) && obj.eql?(pat)) ||
+      (pat.is_a?(Class) && obj.is_a?(pat)) ||
+      (pat.is_a?(Regexp) && pat.match(obj))
   end
 end
 
@@ -118,12 +132,25 @@ p [1, 2, 3, 5].each { |x| x } == [1, 2, 3, 5].my_each { |x| x }
 
 p [1, 2, 3, 4].my_select { |x| (x % 2).zero? } == [1, 2, 3, 4].select { |x| (x % 2).zero?  }
 
-p ['alpha', 'apple', 'allen key'].my_all? { |x| x[0] == 'a' } == ['alpha', 'apple', 'allen key'].all? { |x| x[0] == 'a' }
+# my_none
+p [1, 2, 2, 4, 1].my_none? { |x| x > 6 } 
+p [nil, false, true].my_none?
+p [nil, "hey", "hola"].my_none?(Numeric) 
+p %w[ant bear cat].my_none?(/z/) 
 
-p [1, 2, 2, 4, 7].any? { |x| x > 6 } == [1, 2, 2, 4, 7].my_any? { |x| x > 6 }
+# my_any
+p [1, 2, 2, 4, 4].any? { |x| x > 6 } 
+p [nil, false, false].my_any? 
+p [nil, "hey", "hola"].my_any?(Numeric) 
+p %w[ant bear cat].my_any?(/b/) 
 
-p [1, 2, 2, 4, 6].none? { |x| x > 6 } ==  [1, 2, 2, 4, 6].my_none? { |x| x > 6 }
-p [1, 2, 3, 4, 4, 7, 7, 7, 9].count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 }
+# my all
+p [10, 20, 20, 40, 50].my_all? { |x| x > 6 }
+p [nil, true, true].my_all? 
+p [1, "hey", 3.14].my_all?(Numeric) 
+p %w[ant bear cat].my_all?(/m/) 
+
+p [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 }
 
 p [1, 2, 3, 4, 4, 7, 7, 7, 9].inject { |running_total, item| running_total + item } == [1, 2, 3, 4, 4, 7, 7, 7, 9].my_inject { |running_total, item| running_total + item }
 
