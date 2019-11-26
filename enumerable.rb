@@ -124,34 +124,34 @@ def multiply_els(array)
   array.my_inject(1) { |x, y| x * y }
 end
 
-p [1, 2, 3, 4].my_select { |x| (x % 2).zero? } == [1, 2, 3, 4].select { |x| (x % 2).zero? }
+# p [1, 2, 3, 4].my_select { |x| (x % 2).zero? } == [1, 2, 3, 4].select { |x| (x % 2).zero? }
 
-# my_none
-p [1, 2, 2, 4, 1].my_none? { |x| x > 6 } == [1, 2, 2, 4, 1].none? { |x| x > 6 }
-p [nil, false, true].my_none? == [nil, false, true].none?
-p [nil, "hey", "hola"].my_none?(Numeric) == [nil, "hey", "hola"].none?(Numeric)
-p %w[ant bear cat].my_none?(/z/) == %w[ant bear cat].none?(/z/)
+# # my_none
+# p [1, 2, 2, 4, 1].my_none? { |x| x > 6 } == [1, 2, 2, 4, 1].none? { |x| x > 6 }
+# p [nil, false, true].my_none? == [nil, false, true].none?
+# p [nil, "hey", "hola"].my_none?(Numeric) == [nil, "hey", "hola"].none?(Numeric)
+# p %w[ant bear cat].my_none?(/z/) == %w[ant bear cat].none?(/z/)
 
-# my_any
-p [1, 2, 2, 4, 4].my_any? { |x| x > 6 } == [1, 2, 2, 4, 4].any? { |x| x > 6 }
-p [nil, false, false].my_any? == [nil, false, false].any?
-p [nil, "hey", "hola"].my_any?(Numeric) == [nil, "hey", "hola"].any?(Numeric)
-p %w[ant bear cat].my_any?(/m/) == %w[ant bear cat].any?(/m/)
+# # my_any
+# p [1, 2, 2, 4, 4].my_any? { |x| x > 6 } == [1, 2, 2, 4, 4].any? { |x| x > 6 }
+# p [nil, false, false].my_any? == [nil, false, false].any?
+# p [nil, "hey", "hola"].my_any?(Numeric) == [nil, "hey", "hola"].any?(Numeric)
+# p %w[ant bear cat].my_any?(/m/) == %w[ant bear cat].any?(/m/)
 
-# my all
-p [10, 20, 20, 40, 50].my_all? { |x| x > 6 } == [10, 20, 20, 40, 50].all? { |x| x > 6 }
-p [nil, true, true].my_all? == [nil, true, true].all?
-p [1, "hey", 3.14].my_all?(Numeric) == [1, "hey", 3.14].all?(Numeric)
-p %w[ant bear cat].my_all?(/m/) == %w[ant bear cat].all?(/m/)
+# # my all
+# p [10, 20, 20, 40, 50].my_all? { |x| x > 6 } == [10, 20, 20, 40, 50].all? { |x| x > 6 }
+# p [nil, true, true].my_all? == [nil, true, true].all?
+# p [1, "hey", 3.14].my_all?(Numeric) == [1, "hey", 3.14].all?(Numeric)
+# p %w[ant bear cat].my_all?(/m/) == %w[ant bear cat].all?(/m/)
 
-p [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].count { |i| i > 1 }
+# p [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].count { |i| i > 1 }
 
-arr = [1, 2, 3, 4, 5]
-p arr.my_inject(2) { |m, e| m + e }
-p arr.my_inject { |m, e| m + e }
-p arr.my_inject(1, :*)
-p arr.my_inject(:+)
+# arr = [1, 2, 3, 4, 5]
+# p arr.my_inject(2) { |m, e| m + e }
+# p arr.my_inject { |m, e| m + e }
+# p arr.my_inject(1, :*)
+# p arr.my_inject(:+)
 
-p multiply_els([1, 2, 3])
+# p multiply_els([1, 2, 3])
 
-p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
+# p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
