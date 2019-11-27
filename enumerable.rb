@@ -164,15 +164,13 @@ end
 # arr = [1, 2, 3, 4, 5]
 # p arr.my_inject(2) { |m, e| m + e }
 # p arr.my_inject { |m, e| m + e }
-# p arr.my_inject(1, :*)
+# p arr.my_inject(2, :*)
 # p arr.my_inject(:+)
 
 # p multiply_els([1, 2, 3])
 
 # p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
 
-
 #  p %w{ cat sheep bear }.inject {|memo, word| memo.length > word.length ? memo : word} ==  %w{ cat sheep bear }.my_inject {|memo, word| memo.length > word.length ? memo : word}
 
-
-# p (5..10).inject(1) { |product, n| product * n }
+# p (1..5).my_inject(2) { |product, n| product * n }
