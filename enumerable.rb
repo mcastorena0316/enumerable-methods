@@ -1,39 +1,35 @@
 # module for some enumerable methods
 module Enumerable
   def my_each
-    return to_enum unless block_given?
-
-    new_array = []
-    i = 0
-    while i < size
-      new_array << yield(self[i])
-      i += 1
+    if block_given?
+      for i in self
+        yield(i)
+      end
+      self
+    else
+      to_enum(:my_each)
     end
-    new_array
   end
 
   def my_each_with_index
-    return to_enum unless block_given?
-
-    new_array2 = []
-    i = 0
-    while i < size
-      new_array2 << yield(self[i], i)
-      i += 1
+    if block_given?
+      for i in (0...length)
+        yield(self[i], i)
+      end
+      self
+    else
+      to_enum(:my_each_with_index)
     end
-    new_array2
   end
 
   def my_select
-    return to_enum unless block_given?
-
-    new_array3 = []
-    i = 0
-    while i < size
-      new_array3 << self[i] if yield(self[i]) == true
-      i += 1
+    new_array = []
+    if block_given?
+      my_each { |num| new_array << num if yield(num) }
+      new_array
+    else
+      to_enum(:my_select)
     end
-    new_array3
   end
 
   def my_all?(pat = nil)
@@ -124,7 +120,11 @@ def multiply_els(array)
   array.my_inject(1) { |x, y| x * y }
 end
 
-# p [1, 2, 3, 4].my_select { |x| (x % 2).zero? } == [1, 2, 3, 4].select { |x| (x % 2).zero? }
+# # p (1..5).each { |n| "Current number is: #{n}" }==  (1..5).my_each { |n|  "Current number is: #{n}" }
+
+# p [1,2,3,4,5,6,7,8,9,10].each_with_index{ |num, index| "#{num} is in #{index}"} == [1,2,3,4,5,6,7,8,9,10].my_each_with_index{ |num, index|  "#{num} is in #{index}"}
+# # p (1...6).my_select { |n| n.even? }== (1...6).select { |n| n.even? }
+# p ((1..5).my_select { |x| x > 3 }) == ((1..5).select { |x| x > 3 })
 
 # # my_none
 # p [1, 2, 2, 4, 1].my_none? { |x| x > 6 } == [1, 2, 2, 4, 1].none? { |x| x > 6 }
