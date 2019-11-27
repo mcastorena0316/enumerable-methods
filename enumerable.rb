@@ -80,31 +80,24 @@ module Enumerable
   end
 
   def my_inject(*args)
-    new_array = to_a
-    if block_given?
-      new_array = clone.to_a
-      result = args[0].nil? ? new_array[0] : args[0]
-      new_array if args[0].nil?
-      new_array.each do |number|
-        result = yield(result, number)
+    counter = 0
+    if args.size == 2 || args.size == 1 && block_given?
+      counter = args[0]
+      my_each do |x|
+        next counter = counter.send(args[1], x) if args.length == 2
+
+        counter = yield(counter, x)
       end
-    elsif !block_given?
-      new_array = to_a
-      if args[1].nil?
-        sym = args[0]
-        result = new_array[0]
-        new_array[1..length].my_each do |x|
-          result = result.send(sym, x)
-        end
-      elsif !args[1].nil?
-        sym = args[1]
-        result = args[0]
-        new_array.my_each do |x|
-          result = result.send(sym, x)
-        end
+    else
+      block_given?
+      counter = self[0]
+      self[1..-1].my_each do |x|
+        next counter = yield(counter, x) if block_given?
+
+        counter = counter.send(args[0], x)
       end
     end
-    result
+    counter
   end
 
   def my_map(*)
@@ -161,18 +154,24 @@ end
 
 # p [1, 2, 3, 4, 4, 7, 7, 7, 9].my_count { |i| i > 1 } == [1, 2, 3, 4, 4, 7, 7, 7, 9].count { |i| i > 1 }
 
-# arr = [1, 2, 3, 4, 5]
+# arr = [1, 3, 3, 4, 5]
 # p arr.my_inject(2) { |m, e| m + e }
+# p arr.my_inject(2) { |m, e| m + e } == arr.inject(2) { |m, e| m + e }
 # p arr.my_inject { |m, e| m + e }
-# p arr.my_inject(2, :*)
-# p arr.my_inject(:+)
+# p arr.my_inject { |m, e| m + e } == arr.inject { |m, e| m + e }
+#  p arr.my_inject(2, :*)
+# p arr.my_inject(2, :*) == arr.inject(2, :*)
+#  p arr.my_inject(:+)
+# p arr.my_inject(:+) == arr.inject(:+)
 
 # p multiply_els([1, 2, 3])
 
 # p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
+# #
 
-#  p %w{ cat sheep bear }.inject {|memo, word|
-# memo.length > word.length ? memo : word} ==  %w{ cat sheep bear }.my_inject {|memo, word|
-# memo.length > word.length ? memo : word}
-
+# p %w{ cat sheep bear }.my_inject {|memo, word| memo.length > word.length ? memo : word}
+# p %w{cat sheep bear}.my_inject { |memo, word|
+#   memo.length > word.length ? memo : word
+# } == %w{cat sheep bear}.inject { |memo, word| memo.length > word.length ? memo : word }
 # p (1..5).my_inject(2) { |product, n| product * n }
+# p (1..5).my_inject(2) { |product, n| product * n } == (1..5).inject(2) { |product, n| product * n }
