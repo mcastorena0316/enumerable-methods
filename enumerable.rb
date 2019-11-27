@@ -83,7 +83,6 @@ module Enumerable
     new_array = to_a
     if block_given?
       new_array = clone.to_a
-      p new_array
       result = args[0].nil? ? new_array[0] : args[0]
       new_array if args[0].nil?
       new_array.each do |number|
@@ -172,16 +171,8 @@ end
 
 # p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
 
-# let(:search) { proc { |memo, word| memo.length > word.length ?
 
-# longest = %w{ cat sheep bear }.inject do |memo, word|
-#   memo.length > word.length ? memo : word
-# end
-# p longest
+#  p %w{ cat sheep bear }.inject {|memo, word| memo.length > word.length ? memo : word} ==  %w{ cat sheep bear }.my_inject {|memo, word| memo.length > word.length ? memo : word}
 
-# longest = %w{cat sheep bear}.my_inject do |memo, word|
-#   memo.length > word.length ? memo : word
-# end
-# p longest
 
 # p (5..10).inject(1) { |product, n| product * n }
