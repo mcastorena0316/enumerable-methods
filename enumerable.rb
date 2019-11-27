@@ -80,16 +80,32 @@ module Enumerable
   end
 
   def my_inject(*args)
-    x = args[0].nil? || args[0].class == Symbol ? 0 : args[0]
-    sym = args[0].class == Symbol ? args[0] : args[1].class == Symbol ? args[1] : nil
-    my_each do |elem|
-      x = if sym
-            x.send(sym, elem)
-          else
-            yield(x, elem)
-          end
+    new_array = to_a
+    if block_given?
+      new_array = clone.to_a
+      p new_array
+      result = args[0].nil? ? new_array[0] : args[0]
+      new_array if args[0].nil?
+      new_array.each do |number|
+        result = yield(result, number)
+      end
+    elsif !block_given?
+      new_array = to_a
+      if args[1].nil?
+        sym = args[0]
+        result = new_array[0]
+        new_array[1..length].my_each do |x|
+          result = result.send(sym, x)
+        end
+      elsif !args[1].nil?
+        sym = args[1]
+        result = args[0]
+        new_array.my_each do |x|
+          result = result.send(sym, x)
+        end
+      end
     end
-    x
+    result
   end
 
   def my_map(*)
@@ -120,10 +136,10 @@ def multiply_els(array)
   array.my_inject(1) { |x, y| x * y }
 end
 
-# # p (1..5).each { |n| "Current number is: #{n}" }==  (1..5).my_each { |n|  "Current number is: #{n}" }
+# p (1..5).each { |n| "Current number is: #{n}" }==  (1..5).my_each { |n|  "Current number is: #{n}" }
 
 # p [1,2,3,4,5,6,7,8,9,10].each_with_index{ |num, index| "#{num} is in #{index}"} == [1,2,3,4,5,6,7,8,9,10].my_each_with_index{ |num, index|  "#{num} is in #{index}"}
-# # p (1...6).my_select { |n| n.even? }== (1...6).select { |n| n.even? }
+# p (1...6).my_select { |n| n.even? }== (1...6).select { |n| n.even? }
 # p ((1..5).my_select { |x| x > 3 }) == ((1..5).select { |x| x > 3 })
 
 # # my_none
@@ -155,3 +171,17 @@ end
 # p multiply_els([1, 2, 3])
 
 # p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
+
+# let(:search) { proc { |memo, word| memo.length > word.length ?
+
+# longest = %w{ cat sheep bear }.inject do |memo, word|
+#   memo.length > word.length ? memo : word
+# end
+# p longest
+
+# longest = %w{cat sheep bear}.my_inject do |memo, word|
+#   memo.length > word.length ? memo : word
+# end
+# p longest
+
+# p (5..10).inject(1) { |product, n| product * n }
