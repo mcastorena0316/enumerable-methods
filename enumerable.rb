@@ -171,6 +171,8 @@ end
 
 # p [1, 2, 3, 4, 4, 7, 9].my_map { |i| i * 4 } == [1, 2, 3, 4, 4, 7, 9].map { |i| i * 4 }
 
-#  p %w{ cat sheep bear }.inject {|memo, word| memo.length > word.length ? memo : word} ==  %w{ cat sheep bear }.my_inject {|memo, word| memo.length > word.length ? memo : word}
+#  p %w{ cat sheep bear }.inject {|memo, word|
+# memo.length > word.length ? memo : word} ==  %w{ cat sheep bear }.my_inject {|memo, word|
+# memo.length > word.length ? memo : word}
 
 # p (1..5).my_inject(2) { |product, n| product * n }
